@@ -1,75 +1,33 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
+#include <set>
 
 using namespace std;
 
 int main() {
-    
-    int inputCount = 0;
-    string *input = new string[1025];
-    
-    while (inputCount < 1025) {
-        cin >> input[inputCount];
-        inputCount++;
+    vector<int> input;
+    int x;
+    while (cin >> x) {
+        input.push_back(x);
     }
-
-    bool repeatFound = false;
-    int length = 1025;
-    int *sums = new int[length];
+    set<int> sums;
     int sum = 0;
-    int magic = 0;
-    int k = 0;
-    while (!repeatFound){
+    bool isFound = false;
+    while(isFound == false) {
 
-        for (int i = 0; i < 1025; i++) {
-            string temp = input[i];
-            if (temp.at(0) == '+') {
-                temp.erase (0,1);
-                sum = sum + stoi(temp);
-            }   
-            else if (temp.at(0) == '-') {
-                temp.erase (0,1);
-                sum = sum - stoi(temp);
-            }
-            sums[k] = sum;
-            if ( k != 0 ) {
-                for (int p  = 0; p < k; p++) {
-                    cout << sum << "    " << sums[p] << endl;
-                    if (sum == sums[p]) {
-                        magic = sum;
-                        repeatFound = true;
-                        break;
-                    }
-                }   
-            }
+        for (int i = 0; i < input.size(); i++) {
+            sum = sum + input.at(i);
             
-            k++;
-        }
-        break;
-        /*for (int i = 0; i < length; i++) {
-            for (int j = (i + length - 1025 + 1); j < length; j++) {
-                cout << sums[i] << "    " << sums[j] << endl;
-                if (sums[i] == sums[j]) {
-                    magic == sums[i];
-                    repeatFound = true;
+            if (sums.size() > 1) {
+                if (sums.count (sum) > 0) {
+                    isFound = true;
+                    break;
                 }
             }
-
-        }*/
-        
-
-        length = length + 1025;
-        int *tempSums = new int[length];
-        for (int m = 0; m < length; m++) {
-            tempSums[m] = sums[m];
+            sums.insert(sum);
         }
-        delete [] sums;
-        sums = tempSums;
-        delete [] tempSums;
-        
-        
     }
-
-    cout << "Magic = " << magic << endl;
-
+    cout << "First duplicate frequency is " << sum << endl;
     return 0;
 }
